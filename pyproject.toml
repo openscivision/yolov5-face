@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "yolov5-face"
-version = "0.0.1-alpha.1"
+version = "0.0.1"
 description = "Real-time face detection using YOLOv5 - Fork"
 readme = "README.md"
 license = {text = "GPL-3.0"}

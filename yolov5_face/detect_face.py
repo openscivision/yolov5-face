@@ -24,11 +24,30 @@ from yolov5_face.utils.general import check_img_size, non_max_suppression_face, 
     strip_optimizer, set_logging, increment_path
 from yolov5_face.utils.plots import plot_one_box
 from yolov5_face.utils.torch_utils import select_device, load_classifier, time_synchronized
+from pathlib import Path
+import torch
+from models.experimental import attempt_load
+from models.yolo import Model  # adjust if Model lives elsewhere
 
 
 def load_model(weights, device):
-    model = attempt_load(weights, map_location=device)  # load FP32 model
-    return model
+    """Load standard YOLO weights or fall back to a modern checkpoint layout."""
+    weight_path = Path(weights)
+    if weight_path.is_file() and weight_path.suffix == ".pt":
+        ckpt = torch.load(weight_path, map_location=device)
+        if {"state_dict", "model_cfg"} <= ckpt.keys():
+            cfg = ckpt["model_cfg"]
+            model = Model(cfg, ch=cfg.get("ch", 3), nc=cfg.get("nc", 1))
+            model.load_state_dict(ckpt["state_dict"], strict=False)
+            if "stride" in ckpt:
+                model.stride = ckpt["stride"]
+            if "names" in ckpt:
+                model.names = ckpt["names"]
+            return model.float().eval().requires_grad_(False).to(device)
+    # fallback to original behavior (handles lists, URLs, etc.)
+    return attempt_load(weights, map_location=device)
+
+
 
 
 def scale_coords_landmarks(img1_shape, coords, img0_shape, ratio_pad=None):

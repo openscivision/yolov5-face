@@ -16,12 +16,15 @@ import cv2
 import numpy as np
 import torch
 import torch.nn.functional as F
-from PIL import Image, ExifTags
 from torch.utils.data import Dataset
-from tqdm import tqdm
 
+from yolov5_face.optional import require
 from yolov5_face.utils.general import xyxy2xywh, xywh2xyxy, xywhn2xyxy, clean_str
 from yolov5_face.utils.torch_utils import torch_distributed_zero_first
+
+Image = require("PIL.Image", extra="cli", purpose="dataset/image loading")
+ExifTags = require("PIL.ExifTags", extra="cli", purpose="dataset/image loading")
+tqdm = require("tqdm", extra="cli", purpose="dataset utilities").tqdm
 
 # Parameters
 help_url = "https://github.com/ultralytics/yolov5/wiki/Train-Custom-Data"

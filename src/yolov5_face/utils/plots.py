@@ -8,18 +8,21 @@ from copy import copy
 from pathlib import Path
 
 import cv2
-import matplotlib
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-import seaborn as sns
 import torch
 import yaml
-from PIL import Image
-from scipy.signal import butter, filtfilt
 
+from yolov5_face.optional import require
 from yolov5_face.utils.general import xywh2xyxy, xyxy2xywh
 from yolov5_face.utils.metrics import fitness
+
+matplotlib = require("matplotlib", extra="train", purpose="plotting utilities")
+plt = require("matplotlib.pyplot", extra="train", purpose="plotting utilities")
+pd = require("pandas", extra="train", purpose="plotting utilities")
+sns = require("seaborn", extra="train", purpose="plotting utilities")
+signal = require("scipy.signal", extra="train", purpose="plotting utilities")
+butter, filtfilt = signal.butter, signal.filtfilt
+Image = require("PIL.Image", extra="train", purpose="plotting utilities")
 
 # Settings
 matplotlib.rc("font", **{"size": 11})

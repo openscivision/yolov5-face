@@ -7,7 +7,8 @@ from threading import Thread
 import numpy as np
 import torch
 import yaml
-from tqdm import tqdm
+
+from yolov5_face.optional import require
 
 from yolov5_face.models.experimental import attempt_load
 from yolov5_face.utils.datasets import create_dataloader
@@ -28,6 +29,8 @@ from yolov5_face.utils.loss import compute_loss
 from yolov5_face.utils.metrics import ap_per_class, ConfusionMatrix
 from yolov5_face.utils.plots import plot_images, output_to_target, plot_study_txt
 from yolov5_face.utils.torch_utils import select_device, time_synchronized
+
+tqdm = require("tqdm", extra="train", purpose="evaluation progress").tqdm
 
 
 def test(

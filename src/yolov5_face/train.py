@@ -18,8 +18,8 @@ import torch.utils.data
 import yaml
 from torch.cuda import amp
 from torch.nn.parallel import DistributedDataParallel as DDP
-from torch.utils.tensorboard import SummaryWriter
-from tqdm import tqdm
+
+from yolov5_face.optional import OptionalDependencyError, require
 
 import test  # import test.py to get mAP after each epoch
 from yolov5_face.models.experimental import attempt_load
@@ -55,6 +55,16 @@ from yolov5_face.utils.torch_utils import (
     intersect_dicts,
     torch_distributed_zero_first,
 )
+
+try:
+    from torch.utils.tensorboard import SummaryWriter
+except Exception as exc:  # tensorboard is an external optional dependency
+    raise OptionalDependencyError(
+        "Missing optional dependency 'tensorboard' required for training. "
+        "Install via `pip install yolov5-face[train]`."
+    ) from exc
+
+tqdm = require("tqdm", extra="train", purpose="training progress").tqdm
 
 logger = logging.getLogger(__name__)
 

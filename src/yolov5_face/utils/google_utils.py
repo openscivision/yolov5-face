@@ -6,8 +6,9 @@ import subprocess
 import time
 from pathlib import Path
 
-import requests
 import torch
+
+from yolov5_face.optional import require
 
 
 def gsutil_getsize(url=""):
@@ -21,6 +22,9 @@ def attempt_download(file, repo="ultralytics/yolov5"):
     file = Path(str(file).strip().replace("'", "").lower())
 
     if not file.exists():
+        requests = require(
+            "requests", extra="cli", purpose="auto-downloading model weights"
+        )
         try:
             response = requests.get(
                 f"https://api.github.com/repos/{repo}/releases/latest"

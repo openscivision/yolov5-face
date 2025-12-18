@@ -17,7 +17,6 @@ import torchvision
 import yaml
 
 from yolov5_face.utils.google_utils import gsutil_getsize
-from yolov5_face.utils.metrics import fitness
 from yolov5_face.utils.torch_utils import init_torch_seeds
 
 # Settings
@@ -29,6 +28,12 @@ cv2.setNumThreads(
     0
 )  # prevent OpenCV from multithreading (incompatible with PyTorch DataLoader)
 os.environ["NUMEXPR_MAX_THREADS"] = str(min(os.cpu_count(), 8))  # NumExpr max threads
+
+
+def fitness(x):
+    # Model fitness as a weighted combination of metrics
+    w = [0.0, 0.0, 0.1, 0.9]  # weights for [P, R, mAP@0.5, mAP@0.5:0.95]
+    return (x[:, :4] * w).sum(1)
 
 
 def set_logging(rank=-1):

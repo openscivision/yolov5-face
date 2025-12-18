@@ -6,9 +6,7 @@ import torch
 
 from yolov5_face.models.experimental import attempt_load  # noqa: E402
 from yolov5_face.models.yolo import Model  # noqa: E402
-from yolov5_face.utils.datasets import (  # noqa: E402
-    letterbox,
-)
+from yolov5_face.utils.image import letterbox  # noqa: E402
 from yolov5_face.utils.general import (  # noqa: E402
     check_img_size,
     non_max_suppression_face,
@@ -16,7 +14,9 @@ from yolov5_face.utils.general import (  # noqa: E402
 )
 
 
-def load_model(weights, device):
+def load_model(
+    weights, device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
+):
     """Load standard YOLO weights or fall back to a modern checkpoint layout."""
     weight_path = Path(weights)
     if weight_path.is_file() and weight_path.suffix == ".pt":
@@ -65,7 +65,9 @@ def scale_coords_landmarks(img1_shape, coords, img0_shape, ratio_pad=None):
     return coords
 
 
-def detect_landmarks(model, im, device):
+def detect_landmarks(
+    model, im, device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
+):
     img_size = im.shape[0]
     conf_thres = 0.6
     iou_thres = 0.5

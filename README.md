@@ -80,6 +80,7 @@ Parameters:
 - `--save-img`: save annotated outputs
 - `--view-img`: display a live window
 
+### Model Architecture
 ![](https://raw.githubusercontent.com/openscivision/yolov5-face/07c1390e6c79cc757e58848154c2d780092dbe5e/data/images/Yolo5face.png)
 
 ## Performance

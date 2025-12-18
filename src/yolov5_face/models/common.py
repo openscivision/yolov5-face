@@ -4,19 +4,34 @@ import math
 import warnings
 
 import numpy as np
-import requests
 import torch
 import torch.nn as nn
-from PIL import Image, ImageDraw
 
-from yolov5_face.utils.datasets import letterbox
+from yolov5_face.optional import require
+from yolov5_face.utils.image import letterbox
 from yolov5_face.utils.general import (
     non_max_suppression,
     make_divisible,
     scale_coords,
     xyxy2xywh,
 )
-from yolov5_face.utils.plots import color_list
+
+
+def _color_list():
+    # Lightweight replacement for matplotlib's default "tab10" cycle.
+    # Values are (R, G, B).
+    return [
+        (31, 119, 180),
+        (255, 127, 14),
+        (44, 160, 44),
+        (214, 39, 40),
+        (148, 103, 189),
+        (140, 86, 75),
+        (227, 119, 194),
+        (127, 127, 127),
+        (188, 189, 34),
+        (23, 190, 207),
+    ]
 
 
 def autopad(k, p=None):  # kernel, padding
@@ -478,9 +493,16 @@ class autoShape(nn.Module):
         shape0, shape1 = [], []  # image and inference shapes
         for i, im in enumerate(imgs):
             if isinstance(im, str):  # filename or uri
-                im = Image.open(
-                    requests.get(im, stream=True).raw if im.startswith("http") else im
-                )  # open
+                Image = require(
+                    "PIL.Image", extra="cli", purpose="autoShape image loading"
+                )
+                if im.startswith("http"):
+                    requests = require(
+                        "requests", extra="cli", purpose="autoShape URL loading"
+                    )
+                    im = Image.open(requests.get(im, stream=True).raw)  # open URL
+                else:
+                    im = Image.open(im)  # open local file
             im = np.array(im)  # to numpy
             if im.shape[0] < 5:  # image in CHW
                 im = im.transpose((1, 2, 0))  # reverse dataloader .transpose(2, 0, 1)
@@ -534,7 +556,7 @@ class Detections:
         self.n = len(self.pred)
 
     def display(self, pprint=False, show=False, save=False, render=False):
-        colors = color_list()
+        colors = _color_list()
         for i, (img, pred) in enumerate(zip(self.imgs, self.pred)):
             str = f"Image {i + 1}/{len(self.pred)}: {img.shape[0]}x{img.shape[1]} "
             if pred is not None:
@@ -542,6 +564,12 @@ class Detections:
                     n = (pred[:, -1] == c).sum()  # detections per class
                     str += f"{n} {self.names[int(c)]}s, "  # add to string
                 if show or save or render:
+                    Image = require(
+                        "PIL.Image", extra="cli", purpose="rendering results"
+                    )
+                    ImageDraw = require(
+                        "PIL.ImageDraw", extra="cli", purpose="rendering results"
+                    )
                     img = (
                         Image.fromarray(img.astype(np.uint8))
                         if isinstance(img, np.ndarray)

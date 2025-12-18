@@ -1,35 +1,28 @@
+import numpy as np
+import argparse
 import copy
 from pathlib import Path
 
-from yolov5_face.detect_face import scale_coords_landmarks
+import cv2
+import torch
+
+from yolov5_face.detect_face import load_model, scale_coords_landmarks
 from yolov5_face.utils.datasets import (
-    img_formats,
-    vid_formats,
-    LoadStreams,
     LoadImages,
+    LoadStreams,
+    img_formats,
     letterbox,
+    vid_formats,
 )
 from yolov5_face.utils.general import (
-    increment_path,
     check_img_size,
+    increment_path,
     non_max_suppression_face,
     scale_coords,
 )
-import cv2
-import sys
-import os
-import torch
-import argparse
-from yolov5_face.detect_face import load_model
-import numpy as np
 
 
-FILE = Path(__file__).resolve()
-SRC = FILE.parents[1]
-ROOT = FILE.parents[2]  # repository root
-if str(SRC) not in sys.path:
-    sys.path.append(str(SRC))  # add src/ to PYTHONPATH
-ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
+DEFAULT_PROJECT = Path("runs/detect")
 
 
 def show_results(img, xyxy, conf, landmarks, class_num):
@@ -183,8 +176,8 @@ def detect(model, source, device, project, name, exist_ok, save_img, view_img):
                         print(e)
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(prog="yolov5-face-detect")
     parser.add_argument(
         "--weights",
         nargs="+",
@@ -199,7 +192,9 @@ if __name__ == "__main__":
         "--img-size", type=int, default=640, help="inference size (pixels)"
     )
     parser.add_argument(
-        "--project", default=ROOT / "runs/detect", help="save results to project/name"
+        "--project",
+        default=DEFAULT_PROJECT,
+        help="save results to project/name",
     )
     parser.add_argument("--name", default="exp", help="save results to project/name")
     parser.add_argument(
@@ -209,7 +204,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--save-img", action="store_true", help="save results")
     parser.add_argument("--view-img", action="store_true", help="show results")
-    opt = parser.parse_args()
+    opt = parser.parse_args(argv)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = load_model(opt.weights, device)
@@ -223,3 +218,8 @@ if __name__ == "__main__":
         opt.save_img,
         opt.view_img,
     )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

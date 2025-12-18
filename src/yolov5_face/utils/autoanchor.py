@@ -3,9 +3,8 @@
 import numpy as np
 import torch
 import yaml
-from scipy.cluster.vq import kmeans
-from tqdm import tqdm
 
+from yolov5_face.optional import require
 from yolov5_face.utils.general import colorstr
 
 
@@ -133,7 +132,7 @@ def kmean_anchors(
     if isinstance(path, str):  # *.yaml file
         with open(path) as f:
             data_dict = yaml.load(f, Loader=yaml.SafeLoader)  # model dict
-        from utils.datasets import LoadImagesAndLabels
+        from yolov5_face.utils.datasets import LoadImagesAndLabels
 
         dataset = LoadImagesAndLabels(data_dict["train"], augment=True, rect=True)
     else:
@@ -157,6 +156,9 @@ def kmean_anchors(
     # Kmeans calculation
     print(f"{prefix}Running kmeans for {n} anchors on {len(wh)} points...")
     s = wh.std(0)  # sigmas for whitening
+    kmeans = require(
+        "scipy.cluster.vq", extra="train", purpose="k-means anchors"
+    ).kmeans
     k, dist = kmeans(wh / s, n, iter=30)  # points, mean distance
     k *= s
     wh = torch.tensor(wh, dtype=torch.float32)  # filtered
@@ -183,6 +185,7 @@ def kmean_anchors(
         0.9,
         0.1,
     )  # fitness, generations, mutation prob, sigma
+    tqdm = require("tqdm", extra="train", purpose="anchor evolution progress").tqdm
     pbar = tqdm(
         range(gen), desc=f"{prefix}Evolving anchors with Genetic Algorithm:"
     )  # progress bar

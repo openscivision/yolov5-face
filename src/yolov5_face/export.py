@@ -13,11 +13,13 @@ sys.path.append("../")  # to run '$ python *.py' files in subdirectories
 import torch
 import torch.nn as nn
 
+from yolov5_face.optional import require
 from yolov5_face.models.common import Conv, ShuffleV2Block
 from yolov5_face.models.experimental import attempt_load
 from yolov5_face.utils.activations import Hardswish, SiLU
 from yolov5_face.utils.general import check_img_size, set_logging
-import onnx
+
+onnx = require("onnx", extra="train", purpose="exporting models (ONNX)")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -127,7 +129,9 @@ if __name__ == "__main__":
 
     # onnx infer
     if opt.onnx_infer:
-        import onnxruntime
+        onnxruntime = require(
+            "onnxruntime", extra="train", purpose="ONNX inference test"
+        )
         import numpy as np
 
         providers = ["CPUExecutionProvider"]

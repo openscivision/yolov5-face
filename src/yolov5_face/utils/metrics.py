@@ -2,9 +2,10 @@
 
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
+
+from yolov5_face.optional import require
 
 from . import general
 
@@ -174,7 +175,12 @@ class ConfusionMatrix:
 
     def plot(self, save_dir="", names=()):
         try:
-            import seaborn as sn
+            plt = require(
+                "matplotlib.pyplot",
+                extra="train",
+                purpose="confusion matrix plotting",
+            )
+            sn = require("seaborn", extra="train", purpose="confusion matrix plotting")
 
             array = self.matrix / (
                 self.matrix.sum(0).reshape(1, self.nc + 1) + 1e-6
@@ -211,6 +217,9 @@ class ConfusionMatrix:
 
 
 def plot_pr_curve(px, py, ap, save_dir=".", names=()):
+    plt = require(
+        "matplotlib.pyplot", extra="train", purpose="precision/recall plotting"
+    )
     fig, ax = plt.subplots(1, 1, figsize=(9, 6), tight_layout=True)
     py = np.stack(py, axis=1)
 

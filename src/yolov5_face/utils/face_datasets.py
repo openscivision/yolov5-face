@@ -11,12 +11,17 @@ from pathlib import Path
 import cv2
 import numpy as np
 import torch
-from PIL import Image, ExifTags
 from torch.utils.data import Dataset
-from tqdm import tqdm
 
+from yolov5_face.optional import require
 from yolov5_face.utils.general import xyxy2xywh, xywh2xyxy
 from yolov5_face.utils.torch_utils import torch_distributed_zero_first
+
+Image = require("PIL.Image", extra="train", purpose="training dataset/image loading")
+ExifTags = require(
+    "PIL.ExifTags", extra="train", purpose="training dataset/image loading"
+)
+tqdm = require("tqdm", extra="train", purpose="training dataloading").tqdm
 
 
 # Parameters

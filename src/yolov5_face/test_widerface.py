@@ -14,7 +14,10 @@ from yolov5_face.utils.general import (
     xyxy2xywh,
 )
 from yolov5_face.utils.torch_utils import select_device
-from tqdm import tqdm
+
+from yolov5_face.optional import require
+
+tqdm = require("tqdm", extra="train", purpose="WIDERFace evaluation").tqdm
 
 
 def dynamic_resize(shape, stride=64):

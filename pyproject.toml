@@ -8,14 +8,16 @@ dynamic = ["version"]
 description = "Real-time face detection using YOLOv5 - Fork"
 readme = "README.md"
 license = {text = "GPL-3.0"}
-requires-python = ">=3.6"
+requires-python = ">=3.10,<3.13"
 dependencies = [
 ]
 
 classifiers = [
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
 
 [project.urls]
@@ -25,6 +27,6 @@ website = "https://github.com/deepcam-cn/yolov5-face/"
 where = ["src"]
 
 [tool.setuptools_scm]
-version_file = "src/neurovc/_version.py"
+version_file = "src/yolov5_face/_version.py"
 version_scheme = "no-guess-dev"
 local_scheme = "no-local-version"

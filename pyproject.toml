@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=61", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "yolov5-face"
-version = "0.0.1"
+dynamic = ["version"]
 description = "Real-time face detection using YOLOv5 - Fork"
 readme = "README.md"
 license = {text = "GPL-3.0"}
@@ -20,3 +20,11 @@ classifiers = [
 
 [project.urls]
 website = "https://github.com/deepcam-cn/yolov5-face/"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+version_file = "src/neurovc/_version.py"
+version_scheme = "no-guess-dev"
+local_scheme = "no-local-version"

@@ -10,6 +10,11 @@ readme = "README.md"
 license = {text = "GPL-3.0"}
 requires-python = ">=3.10,<3.13"
 dependencies = [
+    "numpy",
+    "opencv-contrib-python",
+    "pyyaml",
+    "torch",
+    "torchvision",
 ]
 
 classifiers = [
@@ -22,6 +27,29 @@ classifiers = [
 
 [project.urls]
 website = "https://github.com/deepcam-cn/yolov5-face/"
+
+[project.optional-dependencies]
+cli = [
+    "pillow",
+    "requests",
+    "tqdm",
+]
+train = [
+    "matplotlib",
+    "onnx",
+    "onnxruntime",
+    "pandas",
+    "pillow",
+    "requests",
+    "scipy",
+    "seaborn",
+    "tensorboard",
+    "tqdm",
+    "wandb",
+]
+
+[project.scripts]
+yolov5-face-detect = "yolov5_face.detect_face_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

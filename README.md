@@ -2,24 +2,24 @@
 
 **2024.04** [ncnn-android-yolov8-face](https://github.com/derronqi/ncnn-android-yolov8-face)
 
-**2023.04** [yolov8-face](https://github.com/derronqi/yolov8-face) (🔥🔥🔥↑) 
+**2023.04** [yolov8-face](https://github.com/derronqi/yolov8-face) (🔥🔥🔥↑)
 
 **2022.10** [yolov7-face](https://github.com/derronqi/yolov7-face) (🔥🔥🔥↑)
 
 
 **2022.8**: yolov7
 
-| Method           |  Test Size | Easy  | Medium | Hard  | FLOPs (B) @640 | 
-| -----------------| ---------- | ----- | ------ | ----- | -------------- | 
+| Method           |  Test Size | Easy  | Medium | Hard  | FLOPs (B) @640 |
+| -----------------| ---------- | ----- | ------ | ----- | -------------- |
 | yolov7-lite-t    | 640        | 88.7  | 85.2   | 71.5  |  0.8           |
-| yolov7-lite-s    | 640        | 92.7  | 89.9   | 78.5  |  3.0           | 
-| yolov7-tiny      | 640        | 94.7  | 92.6   | 82.1  |  13.2          | 
-| yolov7s          | 640        | 94.8  | 93.1   | 85.2  |  16.8          | 
-| yolov7           | 640        | 96.9  | 95.5   | 88.0  |  103.4         | 
-| yolov7+TTA       | 640        | 97.2  | 95.8   | 87.7  |  103.4         | 
+| yolov7-lite-s    | 640        | 92.7  | 89.9   | 78.5  |  3.0           |
+| yolov7-tiny      | 640        | 94.7  | 92.6   | 82.1  |  13.2          |
+| yolov7s          | 640        | 94.8  | 93.1   | 85.2  |  16.8          |
+| yolov7           | 640        | 96.9  | 95.5   | 88.0  |  103.4         |
+| yolov7+TTA       | 640        | 97.2  | 95.8   | 87.7  |  103.4         |
 
 
-**2021.12**: Yolov5-face to TensorRT. 
+**2021.12**: Yolov5-face to TensorRT.
 
 |   Backbone   | Pytorch(ms) | TensorRT_FP16(ms) |
 | :----------: | :---------: | :---------------: |
@@ -42,7 +42,7 @@
 
 
 **2021.08**: Add new training dataset [Multi-Task-Facial](https://drive.google.com/file/d/1Pwd6ga06cDjeOX20RSC1KWiT888Q9IpM/view?usp=sharing),improve large face detection.
-| Method               | Easy  | Medium | Hard  | 
+| Method               | Easy  | Medium | Hard  |
 | -------------------- | ----- | ------ | ----- |
 | ***YOLOv5s***        | 94.56 | 92.92  | 83.84 |
 | ***YOLOv5m***        | 95.46 | 93.87  | 85.54 |
@@ -53,7 +53,34 @@
 
 Yolov5-face is a real-time,high accuracy face detection.
 
-![](data/images/yolov5-face-p6.png)
+### Installation
+
+Install the package from pip, with optional dependencies cli for the cli tool and train for training:
+
+```bash
+python -m pip install yolov5-face
+```
+
+### Face Detect CLI
+
+To detect from a webcam or images, run:
+
+```bash
+python -m pip install yolov5-face[cli]
+yolov5-face-detect --weights <model.pt> --source <0|path>
+```
+
+Parameters:
+- `--weights`: model `.pt` path(s) (default: `runs/train/exp5/weights/last.pt`)
+- `--source`: input source (default: `0` for webcam; can also be a file/folder)
+- `--img-size`: inference size in pixels (default: `640`)
+- `--project`: output directory root (default: `runs/detect`)
+- `--name`: output run name (default: `exp`)
+- `--exist-ok`: reuse existing `--project/--name` without incrementing
+- `--save-img`: save annotated outputs
+- `--view-img`: display a live window
+
+![](https://raw.githubusercontent.com/openscivision/yolov5-face/07c1390e6c79cc757e58848154c2d780092dbe5e/data/images/Yolo5face.png)
 
 ## Performance
 
@@ -134,13 +161,13 @@ python3 evaluation.py
 
 #### Test
 
-![](data/images/result.jpg)
+![](https://raw.githubusercontent.com/openscivision/yolov5-face/07c1390e6c79cc757e58848154c2d780092dbe5e/data/images/result.jpg)
 
-#### Landmark Visulization 
+#### Landmark Visulization
 
-![](data/images/landmark.png)
-First row: RetinaFace, 2nd row: YOLOv5m-Face 
-**YOLO5Face was used in the 3rd place standard face recogntion track of the [ICCV2021 Masked Face Recognition Challenge](https://www.face-benchmark.org/challenge.html).** 
+![](https://raw.githubusercontent.com/openscivision/yolov5-face/07c1390e6c79cc757e58848154c2d780092dbe5e/data/images/landmark.png)
+First row: RetinaFace, 2nd row: YOLOv5m-Face
+**YOLO5Face was used in the 3rd place standard face recogntion track of the [ICCV2021 Masked Face Recognition Challenge](https://www.face-benchmark.org/challenge.html).**
 
 
 #### AXera demo
@@ -178,8 +205,8 @@ https://github.com/biubug6/Pytorch_Retinaface
 https://github.com/deepinsight/insightface
 
 
-#### Citation 
-- If you think this work is useful for you, please cite 
+#### Citation
+- If you think this work is useful for you, please cite
 
       @article{YOLO5Face,
       title = {YOLO5Face: Why Reinventing a Face Detector},
@@ -187,4 +214,3 @@ https://github.com/deepinsight/insightface
       booktitle = {ArXiv preprint ArXiv:2105.12931},
       year = {2021}
       }
-

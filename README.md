@@ -51,7 +51,7 @@
 
 ## Introduction
 
-Yolov5-face is a real-time,high accuracy face detection.
+Yolov5-face is a real-time,high accuracy face detection. This fork exposes an API for face detection and facial landmark detection capabilities with minimal requirements for the API and guards for optional dependencies.
 
 ### Installation
 
